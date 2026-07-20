@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flight Log — SWE to AI Engineer</title>
+<meta name="description" content="A live, public record of a 60-day transition from software engineer to AI engineer — commits, certifications, and shipped projects.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128640;</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --bg-subtle:#F6F7F8;
+    --ink:#1B1F24;
+    --ink-muted:#666F7A;
+    --ink-faint:#98A0AA;
+    --line:#E5E7EA;
+    --accent:#1A7F45;
+    --accent-tint:rgba(26,127,69,0.08);
+    --accent-tint-strong:rgba(26,127,69,0.14);
+    --font-display:'Space Grotesk',sans-serif;
+    --font-body:'IBM Plex Sans',sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+    --maxw:920px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--accent-tint-strong); color:var(--ink);}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px;}
+
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
+  .eyebrow{
+    font-family:var(--font-mono); font-size:11.5px; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--accent); font-weight:500;
+  }
+  h1,h2,h3{font-family:var(--font-display); margin:0; letter-spacing:-0.01em; font-weight:600;}
+  .mono{font-family:var(--font-mono);}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,255,255,0.86); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:56px;}
+  .brand{font-family:var(--font-mono); font-weight:500; font-size:13.5px; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:8px;}
+  .brand-dot{width:6px; height:6px; border-radius:50%; background:var(--accent);}
+  .navlinks{display:flex; gap:26px; align-items:center;}
+  .navlinks a{font-size:13.5px; color:var(--ink-muted); text-decoration:none; transition:color .15s;}
+  .navlinks a:hover{color:var(--ink);}
+  @media (max-width:640px){ .navlinks a:not(.btn){display:none;} }
+
+  .btn{
+    font-family:var(--font-mono); font-size:12.5px; font-weight:500;
+    padding:8px 14px; border-radius:6px; border:1px solid var(--line); text-decoration:none;
+    display:inline-flex; align-items:center; gap:7px; white-space:nowrap; color:var(--ink);
+    transition:border-color .15s, background .15s;
+  }
+  .btn:hover{border-color:var(--ink-faint); background:var(--bg-subtle);}
+  .btn-primary{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .btn-primary:hover{background:#000; border-color:#000;}
+
+  /* ---------- HERO ---------- */
+  header.hero{padding:64px 0 40px;}
+  .hero-top{display:flex; justify-content:space-between; gap:32px; flex-wrap:wrap; align-items:flex-end;}
+  .hero h1{font-size:36px; margin-top:10px;}
+  .hero .role{font-family:var(--font-mono); color:var(--ink-muted); font-size:14px; margin-top:8px;}
+  .hero .tagline{max-width:54ch; color:var(--ink-muted); margin-top:16px; font-size:15.5px;}
+  .hero-actions{display:flex; gap:10px; flex-wrap:wrap;}
+
+  .statline{
+    display:flex; gap:36px; margin-top:40px; padding-top:24px; border-top:1px solid var(--line);
+    flex-wrap:wrap;
+  }
+  .stat .stat-num{font-family:var(--font-display); font-size:22px; font-weight:600; color:var(--ink);}
+  .stat .stat-num.accent{color:var(--accent);}
+  .stat .stat-label{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-faint); margin-top:4px;}
+
+  /* ---------- FLIGHT PATH GRID (signature element) ---------- */
+  .flightpath{margin-top:40px;}
+  .flightpath-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px; flex-wrap:wrap; gap:8px;}
+  .flightpath-head .label{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-faint); letter-spacing:.06em;}
+  .grid60{
+    display:grid; grid-template-columns:repeat(20,1fr); gap:5px;
+  }
+  @media (max-width:760px){ .grid60{grid-template-columns:repeat(12,1fr);} }
+  @media (max-width:440px){ .grid60{grid-template-columns:repeat(10,1fr);} }
+  .cell{
+    aspect-ratio:1; border-radius:3px; border:1px solid var(--line);
+    background:transparent; position:relative; cursor:default;
+  }
+  .cell.filled{background:var(--accent); border-color:var(--accent);}
+  .cell.current{border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-tint-strong);}
+  .flightpath-legend{display:flex; gap:18px; margin-top:14px; flex-wrap:wrap;}
+  .legend-item{display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--ink-faint); font-family:var(--font-mono);}
+  .legend-swatch{width:10px; height:10px; border-radius:3px; border:1px solid var(--line);}
+  .legend-swatch.filled{background:var(--accent); border-color:var(--accent);}
+  .legend-swatch.current{border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-tint-strong);}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:52px 0; border-top:1px solid var(--line);}
+  .section-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:24px; flex-wrap:wrap; gap:10px;}
+  .section-head h2{font-size:21px;}
+  .section-head .count{font-family:var(--font-mono); font-size:12.5px; color:var(--ink-faint);}
+  .reveal{opacity:0; transform:translateY(8px); transition:opacity .45s ease, transform .45s ease;}
+  .reveal.visible{opacity:1; transform:none;}
+
+  /* activity feed — a quiet list, not a boxed widget */
+  .feed{border-top:1px solid var(--line);}
+  .feed-row{
+    display:flex; align-items:center; gap:14px; padding:12px 0; text-decoration:none; color:var(--ink);
+    border-bottom:1px solid var(--line); transition:opacity .15s;
+  }
+  .feed-row:hover{opacity:0.6;}
+  .feed-sha{
+    font-family:var(--font-mono); font-size:12px; color:var(--ink-muted);
+    background:var(--bg-subtle); padding:3px 7px; border-radius:4px; flex-shrink:0;
+  }
+  .feed-msg{flex:1; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .feed-time{font-family:var(--font-mono); font-size:12px; color:var(--ink-faint); flex-shrink:0;}
+  .feed-empty, .feed-loading{padding:22px 0; color:var(--ink-faint); font-size:13.5px;}
+  .skeleton{height:13px; border-radius:3px; background:var(--bg-subtle); animation:fade 1.3s ease-in-out infinite;}
+  @keyframes fade{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+  /* certifications — list, differentiated by weight not hue */
+  .cert-list{border-top:1px solid var(--line);}
+  .cert-row{
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+    padding:16px 0; border-bottom:1px solid var(--line); text-decoration:none; color:var(--ink);
+    transition:opacity .15s;
+  }
+  .cert-row:hover{opacity:0.6;}
+  .cert-issuer{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint);}
+  .cert-name{font-family:var(--font-display); font-weight:600; font-size:15.5px; margin-top:4px;}
+  .pill{
+    display:inline-flex; align-items:center; font-family:var(--font-mono); font-size:11px;
+    padding:4px 10px; border-radius:20px; font-weight:500; flex-shrink:0; border:1px solid var(--line);
+  }
+  .pill.earned{background:var(--accent-tint); color:var(--accent); border-color:transparent;}
+  .pill.in-progress{background:var(--bg-subtle); color:var(--ink); border-color:transparent;}
+  .pill.planned{color:var(--ink-faint); background:transparent;}
+
+  /* projects */
+  .project-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:-1px;}
+  .project-card{background:var(--bg); padding:22px; display:flex; flex-direction:column; transition:background .15s;}
+  .project-card:hover{background:var(--bg-subtle);}
+  .project-day{font-family:var(--font-mono); font-size:11px; color:var(--ink-faint); letter-spacing:.05em;}
+  .project-title{font-family:var(--font-display); font-size:16.5px; font-weight:600; margin-top:8px;}
+  .project-desc{font-size:13.5px; color:var(--ink-muted); margin-top:8px; flex:1;}
+  .tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:14px;}
+  .tag{font-family:var(--font-mono); font-size:11px; color:var(--ink-muted);}
+  .tag:not(:last-child)::after{content:'·'; margin-left:6px; color:var(--ink-faint);}
+  .project-links{display:flex; gap:16px; margin-top:16px;}
+  .project-links a{font-family:var(--font-mono); font-size:12.5px; color:var(--ink); text-decoration:none; border-bottom:1px solid var(--ink); padding-bottom:1px;}
+  .project-links a:hover{color:var(--accent); border-color:var(--accent);}
+
+  /* footer */
+  footer{padding:44px 0 60px; border-top:1px solid var(--line);}
+  .footer-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
+  .footer-links{display:flex; gap:20px; flex-wrap:wrap;}
+  .footer-links a{font-size:13.5px; color:var(--ink-muted); text-decoration:none; display:flex; align-items:center; gap:6px;}
+  .footer-links a:hover{color:var(--ink);}
+  .footer-note{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-faint); margin-top:20px;}
+  svg.icon{width:14px; height:14px; flex-shrink:0;}
+
+  .setup-note{
+    border-left:2px solid var(--accent); background:var(--bg-subtle);
+    padding:14px 16px; font-size:13px; color:var(--ink-muted); font-family:var(--font-mono); line-height:1.6;
+  }
+  .setup-note code{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="brand-dot"></span><span id="nav-name">flight-log</span></a>
+    <div class="navlinks">
+      <a href="#activity">Activity</a>
+      <a href="#certifications">Certifications</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+      <a class="btn" id="resume-btn" href="#" target="_blank" rel="noopener">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-top">
+      <div>
+        <div class="eyebrow">Software Engineer → AI Engineer</div>
+        <h1 id="hero-name">Your Name</h1>
+        <div class="role" id="hero-role">Building an AI/GenAI engineering track, in public</div>
+        <p class="tagline" id="hero-tagline">A live, public record of a 60-day, project-first transition — every commit, certification, and shipped project tracked here as it happens.</p>
+      </div>
+      <div class="hero-actions">
+        <a class="btn" id="github-btn" href="#" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+          GitHub
+        </a>
+        <a class="btn btn-primary" id="contact-btn" href="#contact">Get in touch</a>
+      </div>
+    </div>
+
+    <div class="statline" id="stat-strip">
+      <div class="stat"><div class="stat-num accent" id="stat-day">—</div><div class="stat-label">Day / 60</div></div>
+      <div class="stat"><div class="stat-num" id="stat-streak">—</div><div class="stat-label">Day streak</div></div>
+      <div class="stat"><div class="stat-num" id="stat-commits">—</div><div class="stat-label">Commits logged</div></div>
+      <div class="stat"><div class="stat-num" id="stat-projects">—</div><div class="stat-label">Projects shipped</div></div>
+    </div>
+
+    <div class="flightpath">
+      <div class="flightpath-head">
+        <span class="label mono">FLIGHT PATH · 60 DAYS</span>
+        <span class="label mono" id="sync-status">connecting to github…</span>
+      </div>
+      <div class="grid60" id="grid60"></div>
+      <div class="flightpath-legend">
+        <div class="legend-item"><span class="legend-swatch filled"></span>day logged</div>
+        <div class="legend-item"><span class="legend-swatch current"></span>today</div>
+        <div class="legend-item"><span class="legend-swatch"></span>upcoming</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="activity">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Live activity</h2>
+      <span class="count mono" id="activity-count"></span>
+    </div>
+    <div class="feed reveal" id="feed">
+      <div class="feed-loading">loading recent commits…</div>
+    </div>
+  </div>
+</section>
+
+<section id="certifications">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Certifications</h2>
+      <span class="count mono" id="cert-count"></span>
+    </div>
+    <div class="cert-list reveal" id="cert-grid"></div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Projects</h2>
+      <span class="count mono" id="project-count"></span>
+    </div>
+    <div class="project-grid reveal" id="project-grid"></div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="footer-row">
+      <div>
+        <h2 style="font-size:19px;">Let's talk</h2>
+        <p style="color:var(--ink-muted); margin-top:8px; max-width:44ch; font-size:14px;">Open to AI/ML engineering roles — happy to walk through any project on this page.</p>
+      </div>
+      <div class="footer-links">
+        <a id="footer-email" href="#">
+          <svg class="icon" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 3h13A1.5 1.5 0 0 1 16 4.5v7A1.5 1.5 0 0 1 14.5 13h-13A1.5 1.5 0 0 1 0 11.5v-7A1.5 1.5 0 0 1 1.5 3Zm.2 1 6.3 4.5L14.3 4H1.7Zm12.8 1.1-6.11 4.36a1 1 0 0 1-1.18 0L1 5.1V11.5a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5V5.1Z"/></svg>
+          Email
+        </a>
+        <a id="footer-linkedin" href="#" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 16 16" fill="currentColor"><path d="M0 1.5A1.5 1.5 0 0 1 1.5 0h13A1.5 1.5 0 0 1 16 1.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13Zm4.94 4.94H2.4V13h2.54V6.44Zm.16-2.29c0-.8-.59-1.42-1.43-1.42-.83 0-1.43.62-1.43 1.42 0 .79.58 1.42 1.41 1.42h.02c.85 0 1.43-.63 1.43-1.42ZM13.6 13v-3.7c0-1.98-1.06-2.9-2.47-2.9-1.14 0-1.65.63-1.93 1.07V6.44H6.65s.03.72 0 6.56h2.55V9.28c0-.2.01-.4.07-.55.16-.4.53-.82 1.14-.82.81 0 1.13.61 1.13 1.5V13h2.55Z"/></svg>
+          LinkedIn
+        </a>
+        <a id="footer-github" href="#" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+    <div class="footer-note" id="footer-note">Last synced —</div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================================
+   EDIT ME — everything on this page is driven from this one config object.
+   Replace the placeholders below with your real details, then commit.
+   ========================================================================= */
+const CONFIG = {
+  name: "Your Name",
+  role: "Software Engineer → AI Engineer",
+  tagline: "A live, public record of a 60-day, project-first transition into AI/GenAI engineering — every commit, certification, and shipped project tracked here as it happens.",
+  email: "you@example.com",
+  linkedin: "https://linkedin.com/in/your-handle",
+  resumeUrl: "resume.pdf", // drop a resume.pdf in this same /docs folder, or point elsewhere
+
+  // The repo that the 60-day roadmap + auto-logger live in.
+  github: { owner: "YOUR_GITHUB_USERNAME", repo: "YOUR_REPO_NAME", branch: "main" },
+  totalDays: 60,
+  // Only used if .learning-config.json can't be fetched (e.g. before your first commit).
+  startDateFallback: "2026-07-17",
+
+  // status: "earned" | "in-progress" | "planned"
+  certifications: [
+    { name: "AWS Certified AI Practitioner", issuer: "AWS", status: "planned", url: "https://aws.amazon.com/certification/certified-ai-practitioner/" },
+    { name: "Claude Certified Developer – Foundations", issuer: "Anthropic", status: "planned", url: "https://www.anthropic.com" },
+    { name: "Databricks Certified Generative AI Engineer Associate", issuer: "Databricks", status: "planned", url: "https://www.databricks.com/learn/certification" },
+    { name: "Google Cloud Professional Machine Learning Engineer", issuer: "Google Cloud", status: "planned", url: "https://cloud.google.com/certification/machine-learning-engineer" },
+    { name: "ChatGPT Prompt Engineering for Developers", issuer: "DeepLearning.AI", status: "planned", url: "https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/" },
+    { name: "NVIDIA-Certified Associate: Generative AI LLMs", issuer: "NVIDIA", status: "planned", url: "https://www.nvidia.com/en-us/learn/certification/generative-ai-llm-associate/" }
+  ],
+
+  projects: [
+    { day: "Day 20", title: "Classical ML Capstone", description: "End-to-end pipeline: EDA → feature engineering → model selection → tuning → evaluation, on a real tabular dataset.", tags: ["scikit-learn", "XGBoost", "Optuna"], repoPath: "day20-classical-ml-capstone", demoUrl: "" },
+    { day: "Day 32", title: "Computer Vision Capstone", description: "Image classifier trained in PyTorch with transfer learning, shipped behind a live Gradio demo.", tags: ["PyTorch", "Transfer Learning", "Gradio"], repoPath: "day32-cv-capstone", demoUrl: "" },
+    { day: "Day 42", title: "NLP Capstone", description: "Fine-tuned transformer for text classification, published to the Hugging Face Hub with a model card.", tags: ["Transformers", "Hugging Face", "Fine-tuning"], repoPath: "day42-nlp-capstone", demoUrl: "" },
+    { day: "Days 49–53", title: "RAG + Agent Pipeline", description: "Retrieval-augmented chatbot over a real document set, extended into a multi-tool agent with LangGraph.", tags: ["RAG", "LangChain", "LangGraph", "Vector DB"], repoPath: "day49-rag-pipeline", demoUrl: "" },
+    { day: "Days 57–58", title: "Flagship Capstone", description: "Production-shaped GenAI application — RAG + tool-using agent + UI — publicly deployed with tests.", tags: ["FastAPI", "Docker", "LLM Ops"], repoPath: "day57-58-capstone", demoUrl: "" }
+  ]
+};
+/* ========================================================================= */
+
+const $ = (id) => document.getElementById(id);
+const isConfigured = !CONFIG.github.owner.startsWith("YOUR_");
+const repoUrl = `https://github.com/${CONFIG.github.owner}/${CONFIG.github.repo}`;
+const rawBase = `https://raw.githubusercontent.com/${CONFIG.github.owner}/${CONFIG.github.repo}/${CONFIG.github.branch}`;
+
+function renderIdentity(){
+  document.title = `${CONFIG.name} — Flight Log`;
+  $("nav-name").textContent = CONFIG.name.toLowerCase().replace(/\s+/g, "-") + "/flight-log";
+  $("hero-name").textContent = CONFIG.name;
+  $("hero-role").textContent = CONFIG.role;
+  $("hero-tagline").textContent = CONFIG.tagline;
+  $("resume-btn").href = CONFIG.resumeUrl;
+  $("github-btn").href = repoUrl;
+  $("footer-github").href = repoUrl;
+  $("footer-linkedin").href = CONFIG.linkedin;
+  $("footer-email").href = `mailto:${CONFIG.email}`;
+  $("contact-btn").href = "#contact";
+}
+
+function buildGrid(days, currentDay){
+  const grid = $("grid60");
+  grid.innerHTML = "";
+  for (let i = 1; i <= CONFIG.totalDays; i++){
+    const cell = document.createElement("div");
+    cell.className = "cell";
+    if (days.has(i)) cell.classList.add("filled");
+    if (i === currentDay) cell.classList.add("current");
+    cell.title = `Day ${i}${days.has(i) ? " — logged" : ""}${i === currentDay ? " (today)" : ""}`;
+    cell.setAttribute("aria-label", cell.title);
+    grid.appendChild(cell);
+  }
+}
+
+function daysBetween(isoStart){
+  const start = new Date(isoStart + "T00:00:00");
+  const today = new Date();
+  const diff = Math.floor((today - start) / 86400000) + 1;
+  return Math.max(1, diff);
+}
+
+async function loadProgress(){
+  if (!isConfigured){
+    $("sync-status").textContent = "config needed — see CONFIG in this file";
+    buildGrid(new Set(), 1);
+    $("stat-day").textContent = "1/60";
+    $("stat-streak").textContent = "0";
+    $("stat-commits").textContent = "0";
+    return;
+  }
+  try {
+    const res = await fetch(`${rawBase}/.learning-progress.json`, { cache: "no-store" });
+    if (!res.ok) throw new Error("no progress file yet");
+    const progress = await res.json();
+    const dayNumbers = new Set(Object.values(progress.days || {}).map(d => d.day_n));
+    const maxDay = dayNumbers.size ? Math.max(...dayNumbers) : 1;
+    const currentDay = Math.min(maxDay, CONFIG.totalDays);
+    buildGrid(dayNumbers, currentDay);
+    $("stat-day").textContent = `${currentDay}/${CONFIG.totalDays}`;
+    $("stat-streak").textContent = progress.streak ?? 0;
+    $("stat-commits").textContent = progress.total_commits ?? 0;
+    $("sync-status").textContent = "synced with github";
+  } catch (e) {
+    // Fall back to a date-based estimate so the page still means something
+    // before the auto-logger has produced its first entry.
+    const currentDay = Math.min(daysBetween(CONFIG.startDateFallback), CONFIG.totalDays);
+    buildGrid(new Set(), currentDay);
+    $("stat-day").textContent = `${currentDay}/${CONFIG.totalDays}`;
+    $("stat-streak").textContent = "0";
+    $("stat-commits").textContent = "0";
+    $("sync-status").textContent = "no progress file yet";
+  }
+}
+
+function timeAgo(iso){
+  const diffMs = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 60) return `${Math.max(mins,0)}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 30) return `${days}d ago`;
+  return new Date(iso).toLocaleDateString();
+}
+
+async function loadActivity(){
+  const feed = $("feed");
+  if (!isConfigured){
+    feed.innerHTML = `<div class="setup-note">Set <code>CONFIG.github.owner</code> and <code>CONFIG.github.repo</code> at the top of this file to pull your live commit history in here.</div>`;
+    $("activity-count").textContent = "";
+    return;
+  }
+  try {
+    const res = await fetch(`https://api.github.com/repos/${CONFIG.github.owner}/${CONFIG.github.repo}/commits?per_page=6`);
+    if (!res.ok) throw new Error("no commits yet");
+    const commits = await res.json();
+    if (!Array.isArray(commits) || commits.length === 0) throw new Error("empty");
+    feed.innerHTML = commits.map(c => `
+      <a class="feed-row" href="${c.html_url}" target="_blank" rel="noopener">
+        <span class="feed-sha mono">${c.sha.slice(0,7)}</span>
+        <span class="feed-msg">${escapeHtml(c.commit.message.split("\n")[0])}</span>
+        <span class="feed-time">${timeAgo(c.commit.author.date)}</span>
+      </a>`).join("");
+    $("activity-count").textContent = `latest ${commits.length}`;
+  } catch (e) {
+    feed.innerHTML = `<div class="feed-empty">No public commits yet — Day 1 starts when you push your first commit to <span class="mono">${CONFIG.github.owner}/${CONFIG.github.repo}</span>.</div>`;
+    $("activity-count").textContent = "";
+  }
+}
+
+function escapeHtml(str){
+  const d = document.createElement("div");
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function renderCertifications(){
+  const grid = $("cert-grid");
+  const statusLabel = { earned: "Earned", "in-progress": "In progress", planned: "Planned" };
+  grid.innerHTML = CONFIG.certifications.map(c => `
+    <a class="cert-row" href="${c.url}" target="_blank" rel="noopener">
+      <div>
+        <div class="cert-issuer">${escapeHtml(c.issuer)}</div>
+        <div class="cert-name">${escapeHtml(c.name)}</div>
+      </div>
+      <span class="pill ${c.status}">${statusLabel[c.status] || c.status}${c.date ? " · " + c.date : ""}</span>
+    </a>`).join("");
+  $("cert-count").textContent = `${CONFIG.certifications.length} tracked`;
+}
+
+function renderProjects(){
+  const grid = $("project-grid");
+  grid.innerHTML = CONFIG.projects.map(p => `
+    <div class="project-card">
+      <div class="project-day mono">${escapeHtml(p.day)}</div>
+      <div class="project-title">${escapeHtml(p.title)}</div>
+      <div class="project-desc">${escapeHtml(p.description)}</div>
+      <div class="tags">${p.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("")}</div>
+      <div class="project-links">
+        <a href="${repoUrl}/tree/${CONFIG.github.branch}/${p.repoPath}" target="_blank" rel="noopener">View code</a>
+        ${p.demoUrl ? `<a href="${p.demoUrl}" target="_blank" rel="noopener">Live demo</a>` : ""}
+      </div>
+    </div>`).join("");
+  $("project-count").textContent = `${CONFIG.projects.length} shipped`;
+}
+
+function setupScrollReveal(){
+  const els = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window)){ els.forEach(el => el.classList.add("visible")); return; }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add("visible"); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  els.forEach(el => io.observe(el));
+}
+
+(async function init(){
+  renderIdentity();
+  renderCertifications();
+  renderProjects();
+  setupScrollReveal();
+  await Promise.all([loadProgress(), loadActivity()]);
+  $("stat-projects").textContent = CONFIG.projects.length;
+  $("footer-note").textContent = `Last synced ${new Date().toLocaleString()}`;
+})();
+</script>
+</body>
+</html>
